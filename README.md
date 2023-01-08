@@ -6,6 +6,10 @@ This bookmarklet has hacks, games etc.
 
 go to bookmark.js and copy that code to your bookmarks bar. Its too shlong to put here.
 
+Original credit to crwn.js for some of the code and the idea.
+
+
+
 ## Games
 
 ### Snake
