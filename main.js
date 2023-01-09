@@ -68,7 +68,7 @@ gt6.id = 'gt6';
 
 document.body.appendChild(mainframe);
 document.body.appendChild(minBar);
-mainframe.append(topBar,title,text,logo,bs1,bs2,bs3,bs4,bs5,bs6,bs7,bs8);
+mainframe.append(topBar,title,text,bs1,bs2,bs3,bs4,bs5,bs6,bs7,bs8);
 mainframe.append(style);
 mainframe.append(gameframe);
 gameframe.append(gt1,gt2,gt3,gt4,gt5,gt6);
@@ -94,6 +94,8 @@ gt3.textContent = '2048';
 gt4.textContent = 'The House';
 gt5.textContent = 'The Wall';
 gt6.textContent = 'Astroids';
+
+title.style.paddingTop = '10px';
 
 dragElement(document.getElementById("mainClient"));
 
@@ -132,7 +134,8 @@ function dragElement(elmnt) {
 }
 
 close.onclick = () => {
-    mainframe.style.display = 'none';
+    mainframe.parentNode.removeChild(mainframe);
+    minBar.parentNode.removeChild(minBar);
 }
 
 minBar.style.display = 'none';
@@ -173,6 +176,8 @@ bs2.onclick = () => {
 }
 
 bs3.onclick = () => {
+    text.style.display = '';
+    text.textContent = 'Changed theme';
     const themeMap = {
         dark: 'light',
         light: 'solar',
@@ -202,98 +207,102 @@ bs4.onclick = () => {
 }
 
 bs5.onclick = () => {
-    javascript:(
-        function hi() {  
-          var parentID = 'a3q_parent';
-          var dID = 'a3q_customNotes';  
-          var buttonID = 'a3q_close_button';  
-          var run = 'a3q_run_button';
-          var saveThrottleSpeed = 100;  
-          var lastSave = Date.now();  
-          var waitCallback;  
-          function a3q_Save(force) {    
-            force = force || false;    
-            clearTimeout(waitCallback);    
-            if (force || Date.now() - lastSave >= saveThrottleSpeed) {      
-              lastSave = Date.now();        
-              localStorage.setItem('a3q_note', a3q_GetContents());    
-            } else {      
-              waitCallback = setTimeout(function() {        
-                a3q_Save();      }, saveThrottleSpeed - Date.now());    }  };  
-                function a3q_Load() {    
-                  return localStorage.getItem('a3q_note') || '';  
-                };  
-                function a3q_GetContents() {    
-                  return document.getElementById(dID).innerHTML;
-                  };  
-                  function a3q_Unload() {    
-                    a3q_Save(true);    
-                    d.removeEventListener('onkeyup', a3q_Save);    
-                    d.parentNode.removeChild(d);    
-                    e.removeEventListener('onkeyup', a3q_Save);    
-                    e.parentNode.removeChild(e);  
-                    c.removeEventListener('onclick', c.onclick);    
-                    c.parentNode.removeChild(c);  };  
-                    var d = document.getElementById(dID); 
-                     var c = document.getElementById(buttonID);  
-                     var e = document.getElementById(run)
-                     if (d) {    
-                      a3q_Unload();  
-                    } else {    
-                      var d = document.createElement('textarea');    
-                      d.id = dID;    d.innerHTML = a3q_Load();    
-                      d.style.backgroundColor = '#333';    
-                      d.style.color = '#ccc';    
-                      d.style.border = '1px solid #ccc';   
-                      d.style.position = 'fixed';    
-                      d.style.width = '20%';    
-                      d.style.height = '20%';    
-                      d.style.right = '2%';    
-                      d.style.bottom = '2%';    
-                      d.style.padding = '2px';    
-                      d.style.zIndex = 10000;    
-                      d.contentEditable = true;    
-                      document.body.appendChild(d);    
-                      d.focus();    
-                      var lastRun = Date.now();    
-                      d.onkeyup = a3q_Save;    
-                      var c = document.createElement('button');    
-                      var e = document.createElement('button');
-                      c.style.position = 'fixed';    
-                      c.id = buttonID;    
-                      c.style.zIndex = 10000;    
-                      c.style.bottom = '2%';    
-                      c.style.right = '2%';    
-                      c.innerHTML = 'Close';    
-                      c.style.backgroundColor = '#333';    
-                      c.style.color = '#ccc';    
-                      c.onclick = function() {      
-                        a3q_Unload();    
-                      };    
-                      document.body.appendChild(e);  
-                      e.style.position = 'fixed';    
-                      e.style.float = 'left';
-                      e.id = run;    
-                      e.style.zIndex = 10000;    
-                      e.style.bottom = '2%';    
-                      e.style.left = '78%';    
-                      e.innerHTML = 'Run';    
-                      e.style.backgroundColor = '#333';    
-                      e.style.color = '#ccc';    
-                      e.onclick = function() {      
-                         var a3q_note = document.getElementById("a3q_customNotes").value;
-                          if (a3q_note == !null) {
-                            document.getElementById("a3q_customNotes").style.color = "red";
-                            a3q_note = "Please enter a proper value";
-                          }
-                          eval(a3q_note);
-                      };    
-                      document.body.appendChild(c);  
-                }})();
+    text.style.display = '';
+    text.textContent = 'Opened notes'
+    javascript:(function(){
+        var parentID = 'a3q_parent';
+        var dID = 'a3q_customNotes';
+        var buttonID = 'a3q_close_button';
+        var saveThrottleSpeed = 100;
+        var lastSave = Date.now();
+        var waitCallback;
+    
+        function a3q_Save(force){
+            force = force || false;
+            clearTimeout( waitCallback );
+            if( force || Date.now() - lastSave >= saveThrottleSpeed ) {
+                lastSave = Date.now();
+                localStorage.setItem( 'a3q_note', a3q_GetContents() );
+            } else {
+                waitCallback = setTimeout(function(){
+                    a3q_Save();
+                }, saveThrottleSpeed - Date.now());
+            }
+        };
+    
+        function a3q_Load() {
+            return localStorage.getItem( 'a3q_note' ) || '';
+        };
+    
+        function a3q_GetContents() {
+            return document.getElementById( dID ).innerHTML;
+        };
+    
+        function a3q_Unload() {
+            a3q_Save( true );
+            d.removeEventListener( 'onkeyup', a3q_Save );
+            d.parentNode.removeChild( d );
+            c.removeEventListener( 'onclick', c.onclick );
+            c.parentNode.removeChild( c );
+            e.parentNode.removeChild( e );
+        };
+    
+        var d = document.getElementById( dID );
+        var c = document.getElementById( buttonID );
+        if ( d ) {
+            a3q_Unload();
+        } else {
+            var d = document.createElement( 'div' );
+            d.id = dID;
+            d.innerHTML = a3q_Load();
+            d.style.backgroundColor = '#333';
+            d.style.color = '#ccc';
+            d.style.border = '1px solid #ccc';
+            d.style.position = 'fixed';
+            d.style.width = '800px';
+            d.style.height = '600px';
+            d.style.left = 'calc(50% - 400px)';
+            d.style.top = 'calc(50% - 300px)';
+            d.style.padding = '5px';
+            d.style.zIndex = 10000;
+            d.contentEditable = true;
+            document.body.appendChild( d );
+            d.focus();
+            var lastRun = Date.now();
+    
+            d.onkeyup = a3q_Save;
+            var c = document.createElement( 'button' );
+            c.style.position = 'fixed';
+            c.id = buttonID;
+            c.style.zIndex = 10000;
+            c.style.top = 'calc(50% + 300px)';
+            c.style.left = 'calc(50% + 350px)';
+            c.innerHTML = 'Close';
+            c.style.backgroundColor = '#333';
+            c.style.color = '#ccc';
+            c.onclick = function(){
+                a3q_Unload();
+            };
+            var e = document.createElement('button');
+            e.style.position = 'fixed';
+            e.id = buttonID;
+            e.style.zIndex = 10000;
+            e.style.top = 'calc(50% + 300px)';
+            e.style.left = 'calc(0% + 50px)';
+            e.innerHTML = 'Run';
+            e.style.backgroundColor = '#333';
+            e.style.color = '#ccc';
+            e.onclick = () => {
+                eval(d.innerText);
+            };
+            document.body.appendChild(c);
+            document.body.appendChild(e);
+        }
+    })();
 }
 
 bs6.onclick = () => {
-    
+    javascript
 }
 
 gameframe.style.display = 'none'
@@ -479,34 +488,32 @@ style.textContent = `
 :root {
     font-size: 16px;
     font-family: 'Open Sans';
-    --text-primary: #b6b6b6;
-    --text-secondary: #ececec;
-    --bg-primary: #23232e;
-    --bg-secondary: #141418;
+    --text-primary: #fff;
+    --text-secondary: #E7E7E7;
+    --bg-primary: linear-gradient(143deg, rgba(2,0,36,1) 0%, rgba(67,124,208,1) 0%, rgba(73,224,255,1) 100%);
+    --bg-secondary: lightblue;
     --transition-speed: 600ms;
   }
 .dark {
-    --text-primary: #b6b6b6;
+    --text-primary: #fff;
     --text-secondary: #ececec;
-    --bg-primary: #23232e;
+    --bg-primary: linear-gradient(180deg, rgba(40,40,40,1) 48%, rgba(0,0,0,1) 96%);
     --bg-secondary: #141418;
-    color: lightgray;
     background-color: #1f2223;
   }
   
   .light {
-    --text-primary: #1f1f1f;
-    --text-secondary: #000000;
-    --bg-primary: #ffffff;
-    --bg-secondary: #e4e4e4;
-    color: black;
-    background-color: lightgray;
+    --text-primary: #fff;
+    --text-secondary: #E7E7E7;
+    --bg-primary: linear-gradient(143deg, rgba(2,0,36,1) 0%, rgba(67,124,208,1) 0%, rgba(73,224,255,1) 100%);
+    --bg-secondary: lightblue;
+    background: linear-gradient(143deg, rgba(2,0,36,1) 0%, rgba(67,124,208,1) 0%, rgba(73,224,255,1) 100%);
   }
   
   .solar {
-    --text-primary: #576e75;
+    --text-primary: #fff;
     --text-secondary: #35535c;
-    --bg-primary: #e6fafd;
+    --bg-primary: linear-gradient(180deg, rgba(247,247,247,0.8043811274509804) 0%, rgba(139,214,110,1) 0%, rgba(29,128,8,1) 100%);
     --bg-secondary: #fefefe;
     color: black;
   }
@@ -547,21 +554,22 @@ style.textContent = `
     background: #024D0F;
 }
 #gameFrame {
-    width: 800px;
-    height: 600px;
+    width: 736px;
+    height: fit-content;
     position: absolute;
 
 }
 #topBar {
-    top: 0;
-    position: absolute;
-    background: linear-gradient(90deg, rgba(247,247,247,0.8043811274509804) 0%, rgba(237,237,237,0.7539609593837535) 44%, rgba(210,210,210,0.7007396708683473) 100%);    width: 800px;
+    top: 15px;
+    position: relative;
+    background: linear-gradient(90deg, rgba(247,247,247,0.8043811274509804) 0%, rgba(237,237,237,0.7539609593837535) 44%, rgba(210,210,210,0.7007396708683473) 100%);    
+    width: 736px;
     z-index: 100002;
     height: 15px;
     cursor: move;
     border-radius: 15px;
-    margin-top: 5px;
-    margin-bottom: 10px;
+    margin: auto;
+    margin-bottom: 1rem;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
 #minBar {
@@ -580,11 +588,11 @@ style.textContent = `
     animation-name: slidein;
     animation-duration: 1s;
 }
-#gameFrame {
-
+p, h1 {
+    color: var(--text-primary);
 }
 #mainClient {
-    background: linear-gradient(143deg, rgba(2,0,36,1) 0%, rgba(67,124,208,1) 0%, rgba(73,224,255,1) 100%);
+    background: var(--bg-primary);
     width: 800px;
     height: 600px;
     border-radius: 10px;
@@ -594,13 +602,15 @@ style.textContent = `
     margin: auto auto;
     position: fixed;
     overflow: auto;
-    top: 2rem;
+    left: var(--x-axis, 2rem);
+    top: var(--y-axis, 2rem);
     z-index: 10000; 
     box-shadow: 5px 10px 18px #888888;
     padding-left: 2rem;
     padding-right: 2rem;
-    font-family: Inter,-apple-system,system-ui,'Segoe UI',Helvetica,Arial,sans-serif;
-    color: white;
+    padding-top: 10px;
+    font-family: Inter,-apple-system,system-ui,'Segoe UI',Helvetica,Arial,sans-serif !important;
+    color: var(--text-primary) !important;
   }
   #mainCommand {
     background: black;
@@ -613,14 +623,15 @@ style.textContent = `
     margin: auto auto;
     position: fixed;
     overflow: auto;
-    top: 2rem;
+    top: var(--x-axis, 2rem);
+    left: var(--y-axis, 2rem);
     z-index: 100000; 
     box-shadow: 5px 10px 18px #888888;
     padding-left: 2rem;
     padding-right: 2rem;
   }
   #title, #author {
-    color: white;
+    color: var(--text-primary);
     font-family: 'Helvetica';
     padding: 10px;
   }
@@ -657,12 +668,12 @@ style.textContent = `
     margin-top: 5px;
   }
     #btn1:hover,#btn2:hover,#btn1:hover, #btn3:hover, #btn4:hover, #btn5:hover, #btn6:hover, #btn7:hover, #btn8:hover, #btn9:hover, #btn10:hover, #gt1:hover, #gt2:hover, #gt3:hover, #gt4:hover, #gt5:hover, #gt6:hover {
-      background-color: E52A70;
+      background-color: #E52A70;
       opacity: 1;
       transform: translateY(0);
       transition-duration: .35s;
     }
-    #btn1:active, #btn2:active, #btn3:active, #btn4:active, #btn5:active, #btn6:active, #7btn:active, #btn8:active, #btn9:active, #btn10:active, #gt1:active, #gt2:active, #gt3:active, #gt4:active, #gt5:active, #gt6:active {
+    #btn1:active, #btn2:active, #btn3:active, #btn4:active, #btn5:active, #btn6:active, #btn7:active, #btn8:active, #btn9:active, #btn10:active, #gt1:active, #gt2:active, #gt3:active, #gt4:active, #gt5:active, #gt6:active {
       transform: translateY(2px);
       transition-duration: .35s;
     }
