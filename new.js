@@ -19,6 +19,19 @@
           elmnt.onmousedown = dragMouseDown;
         }
       
+        function disableClick() {
+          elmnt.removeEventListener("click", preventClick);
+        }
+      
+        function enableClick() {
+          elmnt.addEventListener("click", preventClick);
+        }
+      
+        function preventClick(e) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      
         function dragMouseDown(e) {
           e = e || window.event;
           if (e.target.tagName === "INPUT") {
@@ -28,6 +41,7 @@
       
           e.preventDefault();
           isDragging = true;
+          disableClick(); // Disable click during dragging
           pos3 = e.clientX;
           pos4 = e.clientY;
           document.onmouseup = closeDragElement;
@@ -40,13 +54,13 @@
           }
           e = e || window.event;
           e.preventDefault();
-          
+      
           // Calculate the new position of the element
           pos1 = pos3 - e.clientX;
           pos2 = pos4 - e.clientY;
           pos3 = e.clientX;
           pos4 = e.clientY;
-          
+      
           // Calculate the maximum and minimum allowed X and Y positions
           const maxX = window.innerWidth - elmnt.offsetWidth;
           const maxY = window.innerHeight - elmnt.offsetHeight;
@@ -63,10 +77,12 @@
       
         function closeDragElement() {
           isDragging = false;
+          enableClick(); // Re-enable click after dragging is completed
           document.onmouseup = null;
           document.onmousemove = null;
         }
       }
+      
       const mainframe = new ButtonElement("div", "mainframe");
       const topbar = new ButtonElement("div", "topBar");
       const topContainer = new ButtonElement("div", "topContainer");
@@ -77,6 +93,7 @@
       const open = new ButtonElement("button", "open");
       const h1 = new ButtonElement("h1", "h1");
       const text = new ButtonElement("p", "text");
+      const img = new ButtonElement("img", "");
 
       mainframe.e.appendChild(topContainer.e);
       mainframe.e.appendChild(h1.e);
@@ -85,8 +102,8 @@
       topbar.e.appendChild(close.e);
       topbar.e.appendChild(min.e);
       topbar.e.appendChild(open.e);
+      img.e.src = "data:image/jpeg;base64,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";
       h1.e.textContent = "Luminesence"
-      minbar.e.textContent = "Open";
       text.e.textContent = "An advanced hack client"
       const buttons = [];
       const buttonContent = [
@@ -246,8 +263,8 @@
             javascript:(function(){function l(a,b){b=a.target,a.preventDefault();var d=b.getAttribute("data-k");switch(b.className){case"lc":h.removeItem(d),k();break;case"lv":b.parentNode.innerHTML="<pre>"+h[d]+"</pre>";break;case"lca":h.clear(),k();break;case"sc":i.removeItem(d),k();break;case"sv":b.parentNode.innerHTML="<pre>"+i[d]+"</pre>";break;case"sca":i.clear(),k();break;case"x":c.style.display="none"}}function k(){e=j+"<tr><th colspan=3><h1>localStorage inspector</h1><th><a href=# class=x>close</a><tr><th>storage key<th>size<th><th><a href=# class=lca>clear all</a>",e+=h.length?"":"<tr><td>No Data";for(d=0;d<h.length;d++)g=h.key(d),e+=("<tr><td>$<td>"+h[g].length+"<td><a href=# data-k=\"$\" class=lv>view</a><td><a href=# data-k=\"$\" class=lc>clear</a>").replace(/\$/g,g);e+="<tr><th colspan=3><h1>sessionStorage</h1><tr><th>storage key<th>size<th><th><a href=# class=sca>clear all</a>",e+=i.length?"":"<tr><td>No Data";for(d=0;d<i.length;d++)g=i.key(d),e+=("<tr><td>$<td>"+i[g].length+"<td><a href=# data-k=\"$\" class=sv>view</a><td><a href=# data-k=\"$\" class=sc>clear</a>").replace(/\$/g,g);c.innerHTML=e}var a=document,b="localStorageList",c=a.getElementById(b),d,e,f,g,h=window.localStorage,i=window.sessionStorage,j="<style>$ th, $ td {padding:0 1em;text-align:left;}$ th{font-weight:bold}$ pre{max-width:400px;max-height:300px;overflow:auto;white-space:pre-wrap;}$ h1{font:16px/32px sans-serif;}</style>".replace(/\$/g,"#"+b);c||(c=a.createElement("table"),a.body.appendChild(c),c.addEventListener("click",l,!1)),c.setAttribute("id",b),c.setAttribute("style","position:fixed;top:20px;right:20px;padding:20px;background:#fff;font:12px/20px monospace;z-index:99999;max-height:100%;overflow:auto;border-radius:10px;border:2px solid #000"),c.style.display="block",k()})()
           },
           7: () => {
-              eval("javascript:(function(x,y){if(!window.click){window.click=!0,document.body.style.cursor='crosshair';var cps=prompt('Autoclicker CPS: (Under 200 recommended)');if(!cps||isNaN(cps)?(alert(%27You entered something wrong. Try running the script again.%27),end()):alert(%27Autoclicker activated at %27+cps+%27 CPS! Do [ctrl+e] to stop.%27),addEventListener(%27mousemove%27,e=>{x=e.clientX,y=e.clientY}),addEventListener(%27keydown%27,e=>{%27e%27===e.key&&e.ctrlKey&&(alert(%27Autoclicker deactivated! Click the bookmark again to reactivate!%27),end())}),window.click)var int=setInterval(function(){var e=document.elementFromPoint(x,y);e&&e.click()},1e3/cps);function end(){clearInterval(int),window.click=!1,document.body.style.cursor=%27default%27}}})();")
-          },
+              var acurrentElement=document.body,a_enabled=!1,aEnableKey="[";alert('AutoClicker activated! Use "[" to toggle it!\n\nChange the keybind with "\\".'),document.addEventListener("mouseover",function(e){acurrentElement=e.target}),window.addEventListener("keydown",function(e){e.key==aEnableKey?a_enabled=!a_enabled:"\\"==e.key&&(aEnableKey=prompt("Change keybind:")[0].toLowerCase())}),setInterval(function(){a_enabled&&acurrentElement.click()},1);
+            },
           8: () => {
             const site = window.prompt("What site do you want opened?");
             window.open(site, site, "toolbar=no, location=no");
@@ -256,7 +273,7 @@
           9: () => {
             if (document.getElementById("mainCommand")) {
               document.getElementById("mainCommand").remove();
-              return text.e.textContent = "Closed crwn console"
+              return text.e.textContent = "Closed Lumi console"
             }
             const mainCommand = new ButtonElement("div", "mainCommand");
             const input = new ButtonElement("input", "input");
@@ -266,16 +283,16 @@
             mainCommand.e.appendChild(input.e);
             mainCommand.e.appendChild(box.e);
             box.e.appendChild(output.e);
-            text.e.textContent = "Opened crwn console";
+            text.e.textContent = "Opened Lumi console";
             input.e.style.color = "black";
-            input.e.placeholder = "crwn help";
+            input.e.placeholder = "lumi help";
             input.e.addEventListener('keyup', (event) => {
               if (event.keyCode === 13) {
                 /* put any functions in here */
-                if (!input.e.value.includes("crwn")) {
-                  output.e.innerHTML += "Please put crwn in front of any commands. See 'crwn help'.<br/>"
+                if (!input.e.value.includes("lumi")) {
+                  output.e.innerHTML += "Please put lumi in front of any commands. See 'lumi help'.<br/>"
                 }
-                let value = input.e.value.replace("crwn", "");
+                let value = input.e.value.replace("lumi", "");
                 function end(props) {
                   try {
                     const result = eval(props);
@@ -288,6 +305,57 @@
                 if (value.includes("!ignore")) {
                   value = value.replace("!ignore", "");
                   return end(value);
+                }
+                if (value.includes("help")) {
+                  return output.e.innerHTML += "The commands are: help, more {command} console {color}, text {color}, create {command} {code}, edit, xray, about:blank, delete css, 3d, neon, install Vengeance. Use !ignore to eval statements without commands.<br/>";
+                }
+                if (value.includes("more")) {
+                  const words = value.split(" ");
+                  const moreIndex = words.findIndex(word => word === "more");
+                  const commands = [
+                    "ignore",
+                    "console",
+                    "text",
+                    "create",
+                    "edit",
+                    "xray",
+                    "about:blank",
+                    "delete css",
+                    "3d",
+                    "neon",
+                    "clear cookies",
+                    "install Vengeance",
+                    "help",
+                    "more"
+                  ];
+                  const description = [
+                    "evaluates commands from the inputed text-without interpreting command names",
+                    "changes the windows color, by directly setting it. console {color}",
+                    "changes the windows text color. text {color}",
+                    "creates custom commands, from this format. create {functionName} {{code}} {run, async, unsave, log, redirect {site}, delay {time}, popup {site}}",
+                    "allows text to be directly edited",
+                    "allows inspection of elements on a page",
+                    "opens a new site within an iframe using about:blank, cannot unblock sites. about:blank {site}",
+                    "removes all CSS on a page",
+                    "adds layers to a page, making it seem 3d",
+                    "applies CSS to make the page look neon",
+                    "removes all cookies and stored data on a page",
+                    "installs a third-party client onto the current page",
+                    "shows available commands to execute",
+                    "gives detailed information about the command"
+                  ];
+                
+                  if (moreIndex !== -1 && moreIndex + 1 < words.length) {
+                    const command = words[moreIndex + 1].trim();
+                    const commandIndex = commands.indexOf(command);
+                
+                    if (commandIndex !== -1 && commandIndex < description.length) {
+                      const commandDescription = description[commandIndex];
+                      return output.e.innerHTML += `${command} - ${commandDescription}<br/>`;
+                    } else {
+                      return output.e.innerHTML += `${command} - Command not found<br/>`;
+                    }
+                  }
                 }
                 if (value.includes("console")) {
                   const words = value.split(" ");
@@ -313,6 +381,106 @@
                   const remainingWords = words.slice(textIndex + 2);
                   value = remainingWords.join(" ");
                 }
+                if (value.includes("create")) {
+                  const words = value.split(" ");
+                  const createIndex = words.findIndex(word => word === "create");
+                
+                  if (createIndex !== -1 && createIndex + 1 < words.length) {
+                    var functionName = words[createIndex + 1];
+                    const optionsIndex = createIndex + 2;
+                
+                    if (optionsIndex < words.length) {
+                      const options = words.slice(optionsIndex);
+                
+                      try {
+                        const openBraceIndex = value.indexOf("{", createIndex);
+                        const closeBraceIndex = value.lastIndexOf("}");
+                        if (openBraceIndex !== -1 && closeBraceIndex !== -1) {
+                          var functionCode = value.substring(openBraceIndex + 1, closeBraceIndex);                
+                          const functionStore = {};
+
+                          functionStore[functionName] = new Function(functionCode);
+                
+                          localStorage.setItem(functionName, functionStore[functionName].toString());
+
+                          if (options.includes("async")) {
+                            window.onload = function() {
+                              eval(`${localStorage.getItem(functionName)}()`);
+                            };
+                          }   
+                          if (options.includes("unsave")) {
+                            localStorage.removeItem(functionName);
+                          }                
+                          if (options.includes("log")) {
+                            console.log(functionName + localStorage.getItem(functionName));
+                          }   
+                          if (options.includes("redirect")) {
+                            // Redirect to a specified URL
+                            const redirectIndex = options.indexOf("redirect");
+                            if (redirectIndex !== -1 && redirectIndex + 1 < options.length) {
+                              const redirectTo = options[redirectIndex + 1];
+                              window.location.href = redirectTo;
+                            }
+                          }
+                          if (options.includes("delay")) {
+                            const delayIndex = options.indexOf("delay");
+                            if (delayIndex !== -1 && delayIndex + 1 < options.length) {
+                              const delayTime = parseInt(options[delayIndex + 1]);
+                              if (!isNaN(delayTime) && delayTime > 0) {
+                                functionCode = `
+                                  function ${functionName}_wrapper() {
+                                    setTimeout(() => {
+                                      ${functionCode}
+                                    }, ${delayTime});
+                                  }
+                                `;
+
+                                if (options.includes("run")) {
+                                  functionCode += `
+                                    ${functionName}_wrapper();
+                                  `;
+                                  eval(functionCode);
+                                }
+                              }
+                            }
+                          }
+                          if (options.includes("run")) {
+                            eval(functionCode);
+                          }
+                          if (options.includes("popup")) {
+                            const popupIndex = options.indexOf("popup");
+
+                            if (popupIndex !== -1 && popupIndex + 1 < options.length) {
+                              const popupUrl = options[popupIndex + 1];
+                              const delayIndex = options.indexOf("delay");
+
+                              if (delayIndex !== -1 && delayIndex + 1 < options.length) {
+                                const delayTime = parseInt(options[delayIndex + 1]);
+
+                                if (!isNaN(delayTime) && delayTime > 0) {
+                                  functionCode += `
+                                    setTimeout(function() {
+                                      window.open("${popupUrl}", "_blank", "width=600,height=400");
+                                    }, ${delayTime});
+                                  `;
+                                }
+                              } else {
+                                functionCode += `
+                                  window.open("${popupUrl}", "_blank", "width=600,height=400");
+                                `;
+                              }
+                            }
+                            eval(functionCode);
+                          }
+                        } else {
+                          throw new Error("Code block inside {} is missing.");
+                        }                
+                      } catch (error) {
+                        output.e.innerHTML += `Recieved the following error from this code: ${functionName}, Error: ${error}<br/>`
+                      }
+                    }
+                  }
+                }                                                                                                                      
                 if (value.includes("edit")) {
                   javascript:document.body.contentEditable = true; document.designMode = 'on'; void 0;
                   output.e.innerHTML += "Edit mode enabled<br/>";
@@ -387,9 +555,6 @@
                   javascript:(function () {var v = document.createElement('script');v.src = 'https://cdn.jsdelivr.net/gh/Browncha023/Vengeance@v1.2.0/script.min.js';document.body.appendChild(v);}())
                   output.e.innerHTML += "Installed Vengeance<br/>"
                 }
-                if (value.includes("help")) {
-                  output.e.innerHTML += "The commands are: console {color}, text {color}, edit, xray, about:blank, delete css, 3d, neon, install Vengeance. Use !ignore to eval statements without commands.<br/>";
-                }
               }
             });
           },
@@ -424,10 +589,15 @@
       }
       
       open.e.onclick = () => {
+        const box = document.getElementById("mainframe").getBoundingClientRect();
+        var top, right;
+        top = box.top;
+        right = box.right;
           if (mainframe.e.style.width === '100%') {
               mainframe.e.style.width = '800px'
               mainframe.e.style.height = '600px'
-              mainframe.e.style.top = '2rem'
+              mainframe.e.style.top = top + "px";
+              mainframe.e.style.right = right + "px";
           } else {
               mainframe.e.style.width = '100%';
               mainframe.e.style.height = '100%';
@@ -438,7 +608,9 @@
       
       document.body.appendChild(mainframe.e);
       document.body.appendChild(minbar.e);
-      dragElement(document.getElementById("mainframe"))
+      minbar.e.appendChild(img.e);
+      dragElement(document.getElementById("mainframe"));
+      dragElement(document.getElementById("minbar"));
 
       const style = `
         .dark,.light,.solar,:root{
@@ -512,7 +684,8 @@
             padding-right:2rem;
             padding-top:10px;
             font-family:Inter,-apple-system,system-ui,'Segoe UI',Helvetica,Arial,sans-serif!important;
-            color:var(--text-primary)
+            color:var(--text-primary);
+            display: none;
         }
         #minbar,.btn{
             text-align:center;
@@ -668,19 +841,71 @@
         #mainframe #open :after,#open :before{
             background:#024d0f
         }
-        #mainframe #minbar{
-            display:none;
-            bottom:-5px;
-            left:50px;
-            width:250px;
-            height:25px;
-            box-shadow:rgba(60,64,67,.3) 0 1px 2px 0,rgba(60,64,67,.15) 0 2px 6px 2px;
-            border-radius:8px;
-            z-index:20;
-            background:#f7f7f7;
-            background:linear-gradient(90deg,rgba(247,247,247,.8043811274509804) 0,rgba(237,237,237,.7539609593837535) 44%,rgba(210,210,210,.7007396708683473) 100%);
-            animation-duration:1s
+        #minbar {
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 48px;
+          height: 48px;
+          background-color: rgba(0, 0, 0, 0);
+          border-radius: 10px;
+          cursor: pointer;
+          transition: background-color 0.3s, transform 0.3s;
+          z-index: 10000;
+          animation: rainbowShadow 4s linear infinite;
         }
+        #minbar:hover {
+          background-color: rgba(0, 0, 0, 0.2);
+        }  
+        @keyframes rainbowShadow {
+          0% {
+            box-shadow: 
+              0 0 10px rgba(0, 0, 255, 0.5), 
+              0 0 20px rgba(0, 0, 255, 0.5), 
+              0 0 30px rgba(0, 0, 255, 0.5);
+            transform: rotate(0deg);
+          }
+          25% {
+            box-shadow: 
+              0 0 10px rgba(0, 0, 255, 0.5), 
+              0 0 20px rgba(0, 0, 255, 0.5), 
+              0 0 30px rgba(0, 0, 255, 0.5);
+            transform: rotate(90deg);
+          }
+          50% {
+            box-shadow: 
+              0 0 10px rgba(0, 0, 255, 0.5), 
+              0 0 20px rgba(0, 0, 255, 0.5), 
+              0 0 30px rgba(0, 0, 255, 0.5);
+            transform: rotate(180deg);
+          }
+          75% {
+            box-shadow: 
+              0 0 10px rgba(0, 0, 255, 0.5), 
+              0 0 20px rgba(0, 0, 255, 0.5), 
+              0 0 30px rgba(0, 0, 255, 0.5);
+            transform: rotate(270deg);
+          }
+          100% {
+            box-shadow: 
+              0 0 10px rgba(0, 0, 255, 0.5), 
+              0 0 20px rgba(0, 0, 255, 0.5), 
+              0 0 30px rgba(0, 0, 255, 0.5);
+            transform: rotate(360deg);
+          }
+        }              
+        #minbar img {
+          width: 48px;
+          height: 48px;
+          background-color: rgba(0, 0, 0, 0.2);
+          filter: brightness(150%);
+          border-radius: 10px;
+        }
+        #minbar:hover {
+          background-color: rgba(0, 0, 0, 0.2);
+          transform: rotate(0deg);
+        }        
         #mainframe h1 {
             background-image:linear-gradient(to right,#0f0,#ec4899,#8b5cf6);
             -webkit-background-clip:text;
