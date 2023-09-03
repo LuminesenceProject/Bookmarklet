@@ -52,6 +52,12 @@ Adblock+ - Stops all ads
 
 Autoclicker - Basic autoclicker
 
+### New commands
+
+Localstorage Viewer - See all localstorage items
+
+Popup Browser - A popup window for any site
+
 ## Console Commands
 
 Put crwn infront of any command for it to work.
@@ -104,4 +110,49 @@ Makes the website 3D
 
 Creates a new fake page
 
+## New Commands
 
+### help
+
+Shows list of avalible commands
+
+### more
+
+Gives more details for each of the commands - more {command}
+
+### console
+
+Sets the console to a certain color - console {color}
+
+### text
+
+Changes the color of the text in the console - text {color}
+
+### create
+
+Creates a custom command - create {name} {code} {options}
+
+#### create options
+run - Executes the code immediatly
+async - Runs code on page load
+unsave - Does not save the command
+log - Shows command in pages console
+redirect {site} - Takes user to another page 
+popup {site} - Opens popup to another site
+delay {time} - Waits a certain amount of time
+
+### xray
+
+Shows the code on the pages site
+
+### neon
+
+Makes the page a neon theme
+
+### install Vengeance
+
+Installs a third party hacked client
+
+### !ignore
+
+Ignores the commands, and directly executes any code
