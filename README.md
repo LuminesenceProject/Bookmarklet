@@ -134,19 +134,19 @@ Creates a custom command - create {name} {code} {options}
 
 #### create options
 
-run - Executes the code immediatly
+##### run - Executes the code immediatly
 
-async - Runs code on page load
+##### async - Runs code on page load
 
-unsave - Does not save the command
+##### unsave - Does not save the command
 
-log - Shows command in pages console
+##### log - Shows command in pages console
 
-redirect {site} - Takes user to another page 
+##### redirect {site} - Takes user to another page 
 
-popup {site} - Opens popup to another site
+##### popup {site} - Opens popup to another site
 
-delay {time} - Waits a certain amount of time
+##### delay {time} - Waits a certain amount of time
 
 ### xray
 
