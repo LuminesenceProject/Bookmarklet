@@ -133,12 +133,19 @@ Changes the color of the text in the console - text {color}
 Creates a custom command - create {name} {code} {options}
 
 #### create options
+
 run - Executes the code immediatly
+
 async - Runs code on page load
+
 unsave - Does not save the command
+
 log - Shows command in pages console
+
 redirect {site} - Takes user to another page 
+
 popup {site} - Opens popup to another site
+
 delay {time} - Waits a certain amount of time
 
 ### xray
